@@ -3,6 +3,11 @@
 
 #include <stddef.h>
 
+#ifdef _MSC_VER
+#define inline __inline
+#define restrict __restrict
+#endif
+
 /*
  * Represents a single entry in the list. This must be embedded in your linked
  * structure.

@@ -15,6 +15,11 @@
 extern "C" {
 #endif
 
+#ifdef _MSC_VER
+#define _CRT_SECURE_NO_WARNINGS
+#define restrict __restrict
+#endif
+
 #include <stdbool.h>
 #include <stddef.h> /* for size_t */
 #include <stdint.h>
@@ -322,4 +327,3 @@ const char* nbt_error_to_string(nbt_status);
 #endif
 
 #endif
-
