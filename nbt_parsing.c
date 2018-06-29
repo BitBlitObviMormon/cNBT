@@ -432,17 +432,27 @@ nbt_node* nbt_parse(const void* mem, size_t len)
 }
 
 /* spaces, not tabs ;) */
-static void indent(struct buffer* b, size_t amount)
+static void indent(struct buffer* b, const size_t amount)
 {
-    size_t spaces = amount * 4; /* 4 spaces per indent */
+    const size_t spaces = amount * 4; /* 4 spaces per indent */
 
-    char* temp = alloca(sizeof(char) * (spaces + 1));
+	char* temp;
+	CHECKED_MALLOC(temp, sizeof(char) * (spaces + 1), goto parse_error);
 
     for(size_t i = 0; i < spaces; ++i)
         temp[i] = ' ';
     temp[spaces] = '\0';
 
     bprintf(b, "%s", temp);
+	free(temp);
+	return;
+
+parse_error:
+	if (errno == NBT_OK)
+		errno = NBT_ERR;
+
+	free(temp);
+	return;
 }
 
 static nbt_status __nbt_dump_ascii(const nbt_node*, struct buffer*, size_t ident);
